@@ -7,50 +7,71 @@ use Illuminate\Http\Request;
 
 class BiodataController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $biodatas = Biodata::all();
-            return response()->json($biodatas, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Server Error'], 500);
+        $biodatas = Biodata::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($biodatas);
         }
+
+        return view('biodatas.index', compact('biodatas'));
     }
 
     public function create()
     {
-        // Return view for creating a new biodata
+        return view('biodatas.create');
     }
 
     public function store(Request $request)
     {
         $biodata = Biodata::create($request->all());
-        return response()->json($biodata, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($biodata, 201);
+        }
+
+        return redirect('/biodatas');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $biodata = Biodata::find($id);
-        return response()->json($biodata);
+        $biodata = Biodata::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($biodata);
+        }
+
+        return view('biodatas.show', compact('biodata'));
     }
 
     public function edit($id)
     {
-        $biodata = Biodata::find($id);
-        // Return view for editing the biodata
-        return response()->json($biodata);
+        $biodata = Biodata::findOrFail($id);
+        return view('biodatas.edit', compact('biodata'));
     }
 
     public function update(Request $request, $id)
     {
-        $biodata = Biodata::find($id);
+        $biodata = Biodata::findOrFail($id);
         $biodata->update($request->all());
-        return response()->json($biodata);
+
+        if ($request->is('api/*')) {
+            return response()->json($biodata);
+        }
+
+        return redirect('/biodatas');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Biodata::destroy($id);
-        return response()->json(null, 204);
+        $biodata = Biodata::findOrFail($id);
+        $biodata->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/biodatas');
     }
 }

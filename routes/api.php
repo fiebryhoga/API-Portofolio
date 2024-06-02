@@ -3,16 +3,15 @@
 use App\Http\Controllers\BiodataController;
 use App\Http\Controllers\BlogContentController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ProjectTagController;
 use App\Http\Controllers\ProjectController;
-
-
+use App\Http\Controllers\ProjectTagController;
 use App\Http\Controllers\ReferenceContentController;
 use App\Http\Controllers\ReferenceController;
 use App\Http\Controllers\ToolController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// API routes
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -32,26 +31,25 @@ Route::put('/blogs/{id}', [BlogController::class, 'update']);
 Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
 
 // Blog Content routes
-Route::get('/blogcontents', [BlogContentController::class, 'index']);
-Route::post('/blogcontents', [BlogContentController::class, 'store']);
-Route::get('/blogcontents/{id}', [BlogContentController::class, 'show']);
-Route::put('/blogcontents/{id}', [BlogContentController::class, 'update']);
-Route::delete('/blogcontents/{id}', [BlogContentController::class, 'destroy']);
+Route::get('/blogContents', [BlogContentController::class, 'index']);
+Route::post('/blogContents', [BlogContentController::class, 'store']);
+Route::get('/blogContents/{id}', [BlogContentController::class, 'show']);
+Route::put('/blogContents/{id}', [BlogContentController::class, 'update']);
+Route::delete('/blogContents/{id}', [BlogContentController::class, 'destroy']);
 
+// Project routes
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::post('/projects', [ProjectController::class, 'store']);
 Route::get('/projects/{id}', [ProjectController::class, 'show']);
 Route::put('/projects/{id}', [ProjectController::class, 'update']);
 Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
 
-Route::get('/project-tags', [ProjectTagController::class, 'index']);
-Route::post('/project-tags', [ProjectTagController::class, 'store']);
-Route::get('/project-tags/{id}', [ProjectTagController::class, 'show']);
-Route::put('/project-tags/{id}', [ProjectTagController::class, 'update']);
-Route::delete('/project-tags/{id}', [ProjectTagController::class, 'destroy']);
-
-
-
+// Project Tag routes
+Route::get('/projectTags', [ProjectTagController::class, 'index']);
+Route::post('/projectTags', [ProjectTagController::class, 'store']);
+Route::get('/projectTags/{id}', [ProjectTagController::class, 'show']);
+Route::put('/projectTags/{id}', [ProjectTagController::class, 'update']);
+Route::delete('/projectTags/{id}', [ProjectTagController::class, 'destroy']);
 
 // Reference routes
 Route::get('/references', [ReferenceController::class, 'index']);
@@ -61,11 +59,11 @@ Route::put('/references/{id}', [ReferenceController::class, 'update']);
 Route::delete('/references/{id}', [ReferenceController::class, 'destroy']);
 
 // Reference Content routes
-Route::get('/referencecontents', [ReferenceContentController::class, 'index']);
-Route::post('/referencecontents', [ReferenceContentController::class, 'store']);
-Route::get('/referencecontents/{id}', [ReferenceContentController::class, 'show']);
-Route::put('/referencecontents/{id}', [ReferenceContentController::class, 'update']);
-Route::delete('/referencecontents/{id}', [ReferenceContentController::class, 'destroy']);
+Route::get('/referenceContents', [ReferenceContentController::class, 'index']);
+Route::post('/referenceContents', [ReferenceContentController::class, 'store']);
+Route::get('/referenceContents/{id}', [ReferenceContentController::class, 'show']);
+Route::put('/referenceContents/{id}', [ReferenceContentController::class, 'update']);
+Route::delete('/referenceContents/{id}', [ReferenceContentController::class, 'destroy']);
 
 // Tool routes
 Route::get('/tools', [ToolController::class, 'index']);
@@ -73,8 +71,3 @@ Route::post('/tools', [ToolController::class, 'store']);
 Route::get('/tools/{id}', [ToolController::class, 'show']);
 Route::put('/tools/{id}', [ToolController::class, 'update']);
 Route::delete('/tools/{id}', [ToolController::class, 'destroy']);
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});

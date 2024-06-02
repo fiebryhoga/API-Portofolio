@@ -7,46 +7,71 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::with('contents')->get();
-        return response()->json($blogs);
+        $blogs = Blog::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($blogs);
+        }
+
+        return view('blogs.index', compact('blogs'));
     }
 
     public function create()
     {
-        // Return view for creating a new blog
+        return view('blogs.create');
     }
 
     public function store(Request $request)
     {
         $blog = Blog::create($request->all());
-        return response()->json($blog, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($blog, 201);
+        }
+
+        return redirect('/blogs');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $blog = Blog::with('contents')->find($id);
-        return response()->json($blog);
+        $blog = Blog::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($blog);
+        }
+
+        return view('blogs.show', compact('blog'));
     }
 
     public function edit($id)
     {
-        $blog = Blog::with('contents')->find($id);
-        // Return view for editing the blog
-        return response()->json($blog);
+        $blog = Blog::findOrFail($id);
+        return view('blogs.edit', compact('blog'));
     }
 
     public function update(Request $request, $id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::findOrFail($id);
         $blog->update($request->all());
-        return response()->json($blog);
+
+        if ($request->is('api/*')) {
+            return response()->json($blog);
+        }
+
+        return redirect('/blogs');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Blog::destroy($id);
-        return response()->json(null, 204);
+        $blog = Blog::findOrFail($id);
+        $blog->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/blogs');
     }
 }

@@ -7,34 +7,71 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with('tags')->get();
-        return response()->json($projects);
+        $projects = Project::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($projects);
+        }
+
+        return view('projects.index', compact('projects'));
+    }
+
+    public function create()
+    {
+        return view('projects.create');
     }
 
     public function store(Request $request)
     {
         $project = Project::create($request->all());
-        return response()->json($project, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($project, 201);
+        }
+
+        return redirect('/projects');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $project = Project::with('tags')->find($id);
-        return response()->json($project);
+        $project = Project::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($project);
+        }
+
+        return view('projects.show', compact('project'));
+    }
+
+    public function edit($id)
+    {
+        $project = Project::findOrFail($id);
+        return view('projects.edit', compact('project'));
     }
 
     public function update(Request $request, $id)
     {
-        $project = Project::find($id);
+        $project = Project::findOrFail($id);
         $project->update($request->all());
-        return response()->json($project);
+
+        if ($request->is('api/*')) {
+            return response()->json($project);
+        }
+
+        return redirect('/projects');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Project::destroy($id);
-        return response()->json(null, 204);
+        $project = Project::findOrFail($id);
+        $project->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/projects');
     }
 }

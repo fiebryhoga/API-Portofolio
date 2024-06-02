@@ -7,46 +7,72 @@ use Illuminate\Http\Request;
 
 class BlogContentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contents = BlogContent::all();
-        return response()->json($contents);
+        $blogContents = BlogContent::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($blogContents);
+        }
+
+        return view('blogContents.index', compact('blogContents'));
     }
+
 
     public function create()
     {
-        // Return view for creating a new blog content
+        return view('blogContents.create');
     }
 
     public function store(Request $request)
     {
         $content = BlogContent::create($request->all());
-        return response()->json($content, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($content, 201);
+        }
+
+        return redirect('/blogContents');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $content = BlogContent::find($id);
-        return response()->json($content);
+        $content = BlogContent::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($content);
+        }
+
+        return view('blogContents.show', compact('content'));
     }
 
     public function edit($id)
     {
-        $content = BlogContent::find($id);
-        // Return view for editing the blog content
-        return response()->json($content);
+        $content = BlogContent::findOrFail($id);
+        return view('blogContents.edit', compact('content'));
     }
 
     public function update(Request $request, $id)
     {
-        $content = BlogContent::find($id);
+        $content = BlogContent::findOrFail($id);
         $content->update($request->all());
-        return response()->json($content);
+
+        if ($request->is('api/*')) {
+            return response()->json($content);
+        }
+
+        return redirect('/blogContents');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        BlogContent::destroy($id);
-        return response()->json(null, 204);
+        $content = BlogContent::findOrFail($id);
+        $content->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/blogContents');
     }
 }

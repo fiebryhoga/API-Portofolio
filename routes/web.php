@@ -3,38 +3,35 @@
 use App\Http\Controllers\BiodataController;
 use App\Http\Controllers\BlogContentController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ProjectTagController;
 use App\Http\Controllers\ProjectController;
-
-
+use App\Http\Controllers\ProjectTagController;
 use App\Http\Controllers\ReferenceContentController;
 use App\Http\Controllers\ReferenceController;
 use App\Http\Controllers\ToolController;
 use Illuminate\Support\Facades\Route;
 
-// Biodata Routes
+Route::view('/', 'index');
+
+// Biodata routes
 Route::resource('biodatas', BiodataController::class);
 
-// Blog Routes
+// Blog routes
 Route::resource('blogs', BlogController::class);
 
-// BlogContent Routes
-Route::resource('blog-contents', BlogContentController::class);
+// Blog Content routes
+Route::resource('blogContents', BlogContentController::class);
 
-// Project Routes
+// Project routes
 Route::resource('projects', ProjectController::class);
-Route::resource('project-tags', ProjectTagController::class);
 
+// Project Tag routes
+Route::resource('projectTags', ProjectTagController::class);
 
-// Reference Routes
+// Reference routes
 Route::resource('references', ReferenceController::class);
 
-// ReferenceContent Routes
-Route::resource('reference-contents', ReferenceContentController::class);
+// Reference Content routes
+Route::resource('referenceContents', ReferenceContentController::class);
 
-// Tool Routes
+// Tool routes
 Route::resource('tools', ToolController::class);
-
-Route::get('/', function () {
-    return view('welcome');
-});

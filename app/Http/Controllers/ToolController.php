@@ -7,46 +7,71 @@ use Illuminate\Http\Request;
 
 class ToolController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $tools = Tool::all();
-        return response()->json($tools);
+
+        if ($request->is('api/*')) {
+            return response()->json($tools);
+        }
+
+        return view('tools.index', compact('tools'));
     }
 
     public function create()
     {
-        // Return view for creating a new tool
+        return view('tools.create');
     }
 
     public function store(Request $request)
     {
         $tool = Tool::create($request->all());
-        return response()->json($tool, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($tool, 201);
+        }
+
+        return redirect('/tools');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $tool = Tool::find($id);
-        return response()->json($tool);
+        $tool = Tool::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($tool);
+        }
+
+        return view('tools.show', compact('tool'));
     }
 
     public function edit($id)
     {
-        $tool = Tool::find($id);
-        // Return view for editing the tool
-        return response()->json($tool);
+        $tool = Tool::findOrFail($id);
+        return view('tools.edit', compact('tool'));
     }
 
     public function update(Request $request, $id)
     {
-        $tool = Tool::find($id);
+        $tool = Tool::findOrFail($id);
         $tool->update($request->all());
-        return response()->json($tool);
+
+        if ($request->is('api/*')) {
+            return response()->json($tool);
+        }
+
+        return redirect('/tools');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Tool::destroy($id);
-        return response()->json(null, 204);
+        $tool = Tool::findOrFail($id);
+        $tool->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/tools');
     }
 }

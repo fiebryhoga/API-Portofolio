@@ -7,46 +7,71 @@ use Illuminate\Http\Request;
 
 class ReferenceContentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contents = ReferenceContent::all();
-        return response()->json($contents);
+        $referenceContents = ReferenceContent::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($referenceContents);
+        }
+
+        return view('referenceContents.index', compact('referenceContents'));
     }
 
     public function create()
     {
-        // Return view for creating a new reference content
+        return view('referenceContents.create');
     }
 
     public function store(Request $request)
     {
-        $content = ReferenceContent::create($request->all());
-        return response()->json($content, 201);
+        $referenceContent = ReferenceContent::create($request->all());
+
+        if ($request->is('api/*')) {
+            return response()->json($referenceContent, 201);
+        }
+
+        return redirect('/referenceContents');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $content = ReferenceContent::find($id);
-        return response()->json($content);
+        $referenceContent = ReferenceContent::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($referenceContent);
+        }
+
+        return view('referenceContents.show', compact('referenceContent'));
     }
 
     public function edit($id)
     {
-        $content = ReferenceContent::find($id);
-        // Return view for editing the reference content
-        return response()->json($content);
+        $referenceContent = ReferenceContent::findOrFail($id);
+        return view('referenceContents.edit', compact('referenceContent'));
     }
 
     public function update(Request $request, $id)
     {
-        $content = ReferenceContent::find($id);
-        $content->update($request->all());
-        return response()->json($content);
+        $referenceContent = ReferenceContent::findOrFail($id);
+        $referenceContent->update($request->all());
+
+        if ($request->is('api/*')) {
+            return response()->json($referenceContent);
+        }
+
+        return redirect('/referenceContents');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        ReferenceContent::destroy($id);
-        return response()->json(null, 204);
+        $referenceContent = ReferenceContent::findOrFail($id);
+        $referenceContent->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/referenceContents');
     }
 }

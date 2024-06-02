@@ -7,46 +7,71 @@ use Illuminate\Http\Request;
 
 class ReferenceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $references = Reference::with('contents')->get();
-        return response()->json($references);
+        $references = Reference::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($references);
+        }
+
+        return view('references.index', compact('references'));
     }
 
     public function create()
     {
-        // Return view for creating a new reference
+        return view('references.create');
     }
 
     public function store(Request $request)
     {
         $reference = Reference::create($request->all());
-        return response()->json($reference, 201);
+
+        if ($request->is('api/*')) {
+            return response()->json($reference, 201);
+        }
+
+        return redirect('/references');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $reference = Reference::with('contents')->find($id);
-        return response()->json($reference);
+        $reference = Reference::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($reference);
+        }
+
+        return view('references.show', compact('reference'));
     }
 
     public function edit($id)
     {
-        $reference = Reference::with('contents')->find($id);
-        // Return view for editing the reference
-        return response()->json($reference);
+        $reference = Reference::findOrFail($id);
+        return view('references.edit', compact('reference'));
     }
 
     public function update(Request $request, $id)
     {
-        $reference = Reference::find($id);
+        $reference = Reference::findOrFail($id);
         $reference->update($request->all());
-        return response()->json($reference);
+
+        if ($request->is('api/*')) {
+            return response()->json($reference);
+        }
+
+        return redirect('/references');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Reference::destroy($id);
-        return response()->json(null, 204);
+        $reference = Reference::findOrFail($id);
+        $reference->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/references');
     }
 }

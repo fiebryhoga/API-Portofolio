@@ -7,34 +7,71 @@ use Illuminate\Http\Request;
 
 class ProjectTagController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tags = ProjectTag::all();
-        return response()->json($tags);
+        $projectTags = ProjectTag::all();
+
+        if ($request->is('api/*')) {
+            return response()->json($projectTags);
+        }
+
+        return view('projectTags.index', compact('projectTags'));
+    }
+
+    public function create()
+    {
+        return view('projectTags.create');
     }
 
     public function store(Request $request)
     {
-        $tag = ProjectTag::create($request->all());
-        return response()->json($tag, 201);
+        $projectTag = ProjectTag::create($request->all());
+
+        if ($request->is('api/*')) {
+            return response()->json($projectTag, 201);
+        }
+
+        return redirect('/projectTags');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $tag = ProjectTag::find($id);
-        return response()->json($tag);
+        $projectTag = ProjectTag::findOrFail($id);
+
+        if ($request->is('api/*')) {
+            return response()->json($projectTag);
+        }
+
+        return view('projectTags.show', compact('projectTag'));
+    }
+
+    public function edit($id)
+    {
+        $projectTag = ProjectTag::findOrFail($id);
+        return view('projectTags.edit', compact('projectTag'));
     }
 
     public function update(Request $request, $id)
     {
-        $tag = ProjectTag::find($id);
-        $tag->update($request->all());
-        return response()->json($tag);
+        $projectTag = ProjectTag::findOrFail($id);
+        $projectTag->update($request->all());
+
+        if ($request->is('api/*')) {
+            return response()->json($projectTag);
+        }
+
+        return redirect('/projectTags');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        ProjectTag::destroy($id);
-        return response()->json(null, 204);
+        $projectTag = ProjectTag::findOrFail($id);
+        $projectTag->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json(null, 204);
+        }
+
+        return redirect('/projectTags');
     }
 }
