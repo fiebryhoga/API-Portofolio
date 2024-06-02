@@ -71,4 +71,25 @@
             <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkLinkedin }}" required>
         </div>
         <div class="form-group">
-            <label
+            <label for="linkLinkedin">Link dribble</label>
+            <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkDribble }}" required>
+        </div>
+        <div class="form-group">
+            <label for="linkLinkedin">Link github</label>
+            <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkGithub }}" required>
+        </div>
+        <div class="form-group">
+            <label for="linkLinkedin">Link instagram</label>
+            <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkInstagram }}" required>
+        </div>
+        <div class="form-group">
+            <label for="linkLinkedin">Link twitter</label>
+            <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkTwitter }}" required>
+        </div>
+        <div class="form-group">
+            <label for="linkLinkedin">Link Email</label>
+            <input type="text" name="linkLinkedin" class="form-control" value="{{ $biodata->linkEmail }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+@endsection
